@@ -10,7 +10,7 @@ import android.support.v7.widget.RecyclerView
  * Created by sergiy on 16.03.18.
  */
 open class RecyclerViewActivity : Activity() {
-    private lateinit var rv: RecyclerView
+    private var rv: RecyclerView? = null
 
     fun setAdapter(adapter: RecyclerView.Adapter<*>) {
         getRecyclerView().adapter = adapter
@@ -27,9 +27,10 @@ open class RecyclerViewActivity : Activity() {
     fun getRecyclerView(): RecyclerView {
         if (rv == null) {
             rv = RecyclerView(this)
-            rv.setHasFixedSize(true)
+            rv!!.setHasFixedSize(true)
             setContentView(rv)
         }
-        return rv
+
+        return rv!!
     }
 }
