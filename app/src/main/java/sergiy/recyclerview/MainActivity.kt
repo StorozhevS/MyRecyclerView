@@ -13,6 +13,16 @@ import android.support.v7.widget.RecyclerView
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.support.v7.widget.DividerItemDecoration
+import android.graphics.drawable.Drawable
+import android.util.Log
+import android.widget.Toast
+
+
+
+
+
+
 
 
 class MainActivity : RecyclerViewActivity() {
@@ -28,13 +38,21 @@ class MainActivity : RecyclerViewActivity() {
 //                    .setAction("Action", null).show()
 //        }
         setLayoutManager(LinearLayoutManager(this))
+
+        // вар. 1 можно использовать это (без обрамления лэйаута этим: <android.support.v7.widget.CardView...)
+//        getRecyclerView().addItemDecoration(DividerItemDecoration(this, LinearLayoutManager.VERTICAL))
+
+        // вар 2 можно исопользовать это (тоже без обрамления)
+        val divider = resources.getDrawable(R.drawable.item_divider,null)
+        getRecyclerView().addItemDecoration(HorizontalDividerItemDecoration(divider))
+
         setAdapter(IconicAdapter())
     }
 
     internal inner class IconicAdapter : RecyclerView.Adapter<RowHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RowHolder {
-            return RowHolder(layoutInflater.inflate(R.layout.row, parent, false))
+           return RowHolder(layoutInflater.inflate(R.layout.row, parent, false))
         }
 
         override fun onBindViewHolder(holder: RowHolder, position: Int) {
@@ -46,7 +64,7 @@ class MainActivity : RecyclerViewActivity() {
         }
     }
 
-    internal class RowHolder(row: View) : RecyclerView.ViewHolder(row) {
+    internal class RowHolder(row: View) : RecyclerView.ViewHolder(row), View.OnClickListener {
         var label: TextView
         var size: TextView
         var icon: ImageView
@@ -58,6 +76,14 @@ class MainActivity : RecyclerViewActivity() {
             icon = row.findViewById(R.id.icon) as ImageView
 
             template = size.context.getString(R.string.size_template)
+            row.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View) {
+            Log.d("MyTag","click detected!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            Toast.makeText(v.context,
+                    String.format("Clicked on position %d", adapterPosition),
+                    Toast.LENGTH_SHORT).show()
         }
 
         fun bindModel(item: String) {
